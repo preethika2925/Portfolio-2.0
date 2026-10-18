@@ -17,8 +17,9 @@ if (typeof window !== 'undefined') {
 export const CinematicIntro: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const introOverlayRef = useRef<HTMLDivElement>(null);
-  const introApertureRef = useRef<HTMLDivElement>(null);
-  const introImageRef = useRef<HTMLDivElement>(null);
+  const lensFrameRef = useRef<HTMLDivElement>(null);
+  const macroImageRef = useRef<HTMLDivElement>(null);
+  const glowRingRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroPortraitRef = useRef<HTMLDivElement>(null);
 
@@ -55,20 +56,33 @@ export const CinematicIntro: React.FC = () => {
 
     const ctx = gsap.context(() => {
       // 1. Initial State:
-      // The eye starts framed in an ultra-crisp, high-fashion letterbox aperture
-      // directly inside the portrait card's natural position (no random floating circle!).
-      gsap.set(introImageRef.current, {
-        scale: 2.2,
-        xPercent: 10,
-        yPercent: 12,
+      // The lens starts in the center as an elegant circular aperture framing Preethika's eye.
+      // Pupil coordinates: x=45.5%, y=44.1%.
+      // Zoom factor: 2.6x with exact pupil centering:
+      const startScale = 2.6;
+      const startXPercent = 11.7; // (50% - 45.5%) * 2.6
+      const startYPercent = 15.3; // (50% - 44.1%) * 2.6
+
+      gsap.set(macroImageRef.current, {
+        scale: startScale,
+        xPercent: startXPercent,
+        yPercent: startYPercent,
         transformOrigin: '50% 50%',
       });
 
-      gsap.set(introApertureRef.current, {
-        clipPath: 'inset(22% 8% 46% 8% round 20px)',
+      gsap.set(lensFrameRef.current, {
+        width: 240,
+        height: 240,
+        borderRadius: '9999px',
+        boxShadow: '0 0 60px rgba(167, 199, 181, 0.25)',
       });
 
-      gsap.set('.intro-copy-reveal', {
+      gsap.set(glowRingRef.current, {
+        scale: 0.95,
+        opacity: 0.6,
+      });
+
+      gsap.set('.intro-text-reveal', {
         opacity: 0,
         y: 20,
       });
@@ -82,53 +96,68 @@ export const CinematicIntro: React.FC = () => {
         defaults: { ease: 'power3.inOut' },
       });
 
-      // Step 1: Reveal intro typography and letterbox eye aperture smoothly
-      tl.to('.intro-copy-reveal', {
+      // Step 1: Smoothly fade in top and bottom portfolio identity text
+      tl.to('.intro-text-reveal', {
         opacity: 1,
         y: 0,
         stagger: 0.1,
-        duration: 0.6,
+        duration: 0.7,
         ease: 'power2.out',
       })
-        // Step 2: Gentle eye focus breath
+        // Step 2: Gentle eye focus pulse
         .to(
-          introImageRef.current,
+          macroImageRef.current,
           {
-            scale: 2.3,
-            duration: 0.7,
+            scale: startScale * 1.05,
+            duration: 0.8,
             ease: 'sine.inOut',
           },
           '+=0.1'
         )
-        // Step 3: The Grand Reveal — The letterbox aperture opens smoothly to full portrait frame
-        // while the image pulls back to 100% full natural portrait framing!
+        // Step 3: THE ENHANCED SMOOTH EXPANSION & CAMERA PULL-BACK
+        // The lens smoothly expands from circle into a luxury rounded editorial portrait
+        // while the image gracefully glides from the eye to the full, sharp portrait!
         .to(
-          introApertureRef.current,
+          lensFrameRef.current,
           {
-            clipPath: 'inset(0% 0% 0% 0% round 0px)',
-            duration: 1.4,
+            width: 340,
+            height: 425,
+            borderRadius: '28px',
+            boxShadow: '0 25px 80px rgba(0, 0, 0, 0.7)',
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+            duration: 1.5,
             ease: 'expo.inOut',
           },
-          '+=0.05'
+          '+=0.1'
         )
         .to(
-          introImageRef.current,
+          macroImageRef.current,
           {
             scale: 1,
             xPercent: 0,
             yPercent: 0,
-            duration: 1.4,
+            duration: 1.5,
             ease: 'expo.inOut',
           },
           '<'
         )
-        // Step 4: Seamless Crossfade — Since the intro card and hero card occupy the EXACT same spatial slot,
-        // dissolving the dark overlay creates an effortless, pixel-perfect transition!
+        .to(
+          glowRingRef.current,
+          {
+            scale: 1.4,
+            opacity: 0,
+            duration: 1.0,
+            ease: 'power2.out',
+          },
+          '<'
+        )
+        // Step 4: Seamless Crossfade into the Hero section
+        // Dissolves the dark intro screen while the light hero and single hero portrait smoothly take over!
         .to(
           introOverlayRef.current,
           {
             opacity: 0,
-            duration: 0.75,
+            duration: 0.8,
             ease: 'power2.inOut',
             onComplete: () => {
               if (introOverlayRef.current) {
@@ -136,16 +165,16 @@ export const CinematicIntro: React.FC = () => {
               }
             },
           },
-          '+=0.1'
+          '+=0.2'
         )
-        // Step 5: Stagger in the interactive hero CTAs and pills
+        // Step 5: Stagger in the interactive hero typography and actions
         .to(
           '.hero-stagger',
           {
             opacity: 1,
             y: 0,
             stagger: 0.08,
-            duration: 0.75,
+            duration: 0.8,
             ease: 'power3.out',
           },
           '-=0.4'
@@ -200,101 +229,82 @@ export const CinematicIntro: React.FC = () => {
     >
       {/* 
         =======================================================
-        CINEMATIC INTRO OVERLAY (Matches Exact Hero Spatial Grid)
-        No weird circle morphs. Pure editorial film-strip reveal.
+        CENTRAL CINEMATIC ENTRY ANIMATION (Enhanced & Smoothed)
+        100% Focused on Preethika Suresh's portfolio content!
         Click anywhere to smoothly expedite into hero.
         =======================================================
       */}
       <div
         ref={introOverlayRef}
         onClick={handleExpediteIntro}
-        className="fixed inset-0 z-50 flex flex-col justify-between p-6 md:p-12 lg:px-16 bg-[#111111] text-[#F8F8F5] transition-opacity duration-700 select-none cursor-pointer"
+        className="fixed inset-0 z-50 flex flex-col justify-between p-8 md:p-12 bg-[#101010] text-[#F8F8F5] transition-opacity duration-700 select-none cursor-pointer"
       >
-        {/* Top Bar: Pure Portfolio Identity */}
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-between text-xs font-mono uppercase tracking-[0.25em] text-[#A7C7B5]">
-          <span className="intro-copy-reveal flex items-center gap-2">
+        {/* Top Header: Pure Portfolio Identity */}
+        <div className="w-full max-w-6xl mx-auto flex items-center justify-between text-xs font-mono uppercase tracking-[0.25em] text-[#A7C7B5]">
+          <span className="intro-text-reveal flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#A7C7B5] animate-pulse" />
             {profileData.name}
           </span>
-          <span className="intro-copy-reveal text-white/50 hidden sm:inline">
+          <span className="intro-text-reveal text-white/50 hidden sm:inline">
             B.E. Electronics &amp; Communication &apos;29
           </span>
-          <span className="intro-copy-reveal text-white/40">KKIT Coimbatore</span>
+          <span className="intro-text-reveal text-white/40">KKIT Coimbatore</span>
         </div>
 
-        {/* Center Grid: Matches Hero Layout to Prevent Any Image Jumping */}
-        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center my-auto">
-          {/* Left Column: Pure Editorial Typography */}
-          <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
-            <div className="intro-copy-reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 self-start text-xs font-mono text-[#A7C7B5] tracking-wider uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-              <span>Electronics &amp; Communication Engineering &apos;29</span>
-            </div>
+        {/* Center: Eye Lens & Editorial Narrative */}
+        <div className="relative flex flex-col items-center justify-center my-auto space-y-8">
+          {/* Central Animated Aperture Lens */}
+          <div className="relative flex items-center justify-center">
+            {/* Luminous Ambient Glow Ring */}
+            <div
+              ref={glowRingRef}
+              className="absolute w-72 h-72 md:w-84 md:h-84 rounded-full border border-[#A7C7B5]/30 animate-[spin_35s_linear_infinite] pointer-events-none"
+            />
 
-            <div className="space-y-2">
-              <h1 className="intro-copy-reveal clamp-headline-xl font-serif-editorial tracking-tight text-white leading-none">
-                Preethika Suresh
-              </h1>
-              <p className="intro-copy-reveal text-lg md:text-2xl font-serif-editorial text-[#A7C7B5] italic">
-                Curious by nature. An engineer in progress.
-              </p>
-            </div>
-
-            <p className="intro-copy-reveal text-sm md:text-base text-white/70 leading-relaxed max-w-xl font-sans">
-              Building at the intersection of software, electronics, and intelligent systems.
-            </p>
-
-            <div className="intro-copy-reveal pt-2 text-xs font-mono text-white/40 uppercase tracking-widest flex items-center gap-3">
-              <span>KKIT Coimbatore</span>
-              <span>•</span>
-              <span>Class of 2029</span>
-              <span>•</span>
-              <span className="text-[#A7C7B5]">Click Anywhere To Enter</span>
-            </div>
-          </div>
-
-          {/* Right Column: In-Place Editorial Eye Reveal (Letterbox Aperture -> Full Card) */}
-          <div className="lg:col-span-5 relative flex justify-center items-center">
-            {/* Subtle Ambient Frame */}
-            <div className="absolute -inset-3 rounded-3xl border border-white/10 pointer-events-none -rotate-1 -z-10" />
-
-            {/* In-Place Portrait Card (Identical dimensions as hero!) */}
-            <div className="relative w-full max-w-[380px] aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-[#1a1a1a]">
-              {/* Letterbox Aperture Container */}
+            {/* The Lens Container that smoothly morphs from circle to rounded portrait */}
+            <div
+              ref={lensFrameRef}
+              className="relative overflow-hidden border-2 border-[#A7C7B5]/60 bg-[#161616] will-change-transform flex items-center justify-center shadow-2xl transition-colors duration-500"
+            >
               <div
-                ref={introApertureRef}
-                className="relative w-full h-full overflow-hidden will-change-transform"
+                ref={macroImageRef}
+                className="relative w-full h-full will-change-transform"
               >
-                <div
-                  ref={introImageRef}
-                  className="relative w-full h-full will-change-transform"
-                >
-                  <Image
-                    src={eyeConfig.portraitPath}
-                    alt={profileData.name}
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 420px"
-                    className="object-cover"
-                    style={{ objectPosition: '50% 36%' }}
-                  />
-                </div>
+                <Image
+                  src={eyeConfig.portraitPath}
+                  alt={profileData.name}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 340px, 420px"
+                  className="object-cover"
+                  style={{ objectPosition: '50% 36%' }}
+                />
               </div>
 
-              {/* Card Footer Tag */}
-              <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#111111]/90 via-[#111111]/40 to-transparent text-white flex items-center justify-between text-xs font-mono">
+              {/* Elegant interior caption that appears when card forms */}
+              <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#101010]/90 via-[#101010]/40 to-transparent text-white flex items-center justify-between text-xs font-mono pointer-events-none">
                 <span className="tracking-wide">PREETHIKA SURESH</span>
                 <span className="text-[#A7C7B5]">KKIT • ECE</span>
               </div>
             </div>
           </div>
+
+          {/* Central Editorial Narrative */}
+          <div className="text-center space-y-2 max-w-lg">
+            <h2 className="intro-text-reveal text-2xl sm:text-3xl md:text-4xl font-serif-editorial text-white tracking-tight">
+              Curious by nature. <span className="italic text-[#A7C7B5]">An engineer in progress.</span>
+            </h2>
+            <p className="intro-text-reveal text-xs md:text-sm font-sans text-white/60 font-light tracking-wide">
+              Building at the intersection of software, electronics, and intelligent systems.
+            </p>
+          </div>
         </div>
 
         {/* Bottom Bar: Institutional Detail */}
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-between text-[11px] font-mono text-white/40 uppercase tracking-widest border-t border-white/10 pt-4">
-          <span className="intro-copy-reveal">Kalaignar Karunanidhi Institute of Technology</span>
-          <span className="intro-copy-reveal hidden sm:inline text-[#A7C7B5]">Engineering Portfolio</span>
-          <span className="intro-copy-reveal">2025 — 2029</span>
+        <div className="w-full max-w-6xl mx-auto flex items-center justify-between text-[11px] font-mono text-white/40 uppercase tracking-widest border-t border-white/10 pt-4">
+          <span className="intro-text-reveal">Kalaignar Karunanidhi Institute of Technology</span>
+          <span className="intro-text-reveal hidden sm:inline text-[#A7C7B5]">Engineering Portfolio</span>
+          <span className="intro-text-reveal">2025 — 2029</span>
         </div>
       </div>
 
