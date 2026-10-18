@@ -227,7 +227,7 @@ export const ContactSection: React.FC = () => {
               </span>
               <p className="text-sm text-[#171717] font-medium">{profileData.location}</p>
               <p className="text-xs text-[#777777]">
-                Kalaignar Karunanidhi Institute of Technology (KKIT) • ECE Department
+                Kalaignar Karunanidhi Institute of Technology (KIT) • ECE Department
               </p>
             </div>
           </div>

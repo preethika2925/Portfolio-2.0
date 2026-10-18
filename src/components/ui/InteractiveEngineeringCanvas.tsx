@@ -223,7 +223,7 @@ export const InteractiveEngineeringCanvas: React.FC = () => {
       <div className="relative z-10 pt-4 border-t border-[#E5E5E0] flex items-center justify-between text-[11px] font-mono text-[#777777]">
         <div className="flex items-center gap-1.5">
           <Compass className="w-3.5 h-3.5 text-[#A7C7B5]" />
-          <span>KKIT • 11.0168° N</span>
+          <span>KIT • 11.0168° N</span>
         </div>
         <div className="flex items-center gap-1.5 text-[#171717] font-medium">
           <Code2 className="w-3.5 h-3.5 text-[#A7C7B5]" />

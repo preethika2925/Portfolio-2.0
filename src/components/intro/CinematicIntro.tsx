@@ -260,7 +260,7 @@ export const CinematicIntro: React.FC = () => {
           <span className="intro-text-reveal text-white/50 hidden sm:inline">
             B.E. Electronics &amp; Communication &apos;29
           </span>
-          <span className="intro-text-reveal text-white/40">KKIT Coimbatore</span>
+          <span className="intro-text-reveal text-white/40">KIT Coimbatore</span>
         </div>
 
         {/* Center: Eye Lens & Editorial Narrative */}
@@ -296,7 +296,7 @@ export const CinematicIntro: React.FC = () => {
               {/* Elegant interior caption that appears when card forms */}
               <div className="intro-card-caption absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#101010]/90 via-[#101010]/40 to-transparent text-white flex items-center justify-between text-xs font-mono pointer-events-none">
                 <span className="tracking-wide">PREETHIKA SURESH</span>
-                <span className="text-[#A7C7B5]">KKIT • ECE</span>
+                <span className="text-[#A7C7B5]">KIT • ECE</span>
               </div>
             </div>
           </div>
@@ -417,7 +417,7 @@ export const CinematicIntro: React.FC = () => {
             {/* Elegant overlay caption */}
             <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#171717]/85 via-[#171717]/40 to-transparent text-white flex items-center justify-between text-xs font-mono">
               <span className="tracking-wide">PREETHIKA SURESH</span>
-              <span className="text-[#A7C7B5]">KKIT • ECE</span>
+              <span className="text-[#A7C7B5]">KIT • ECE</span>
             </div>
           </div>
         </div>
