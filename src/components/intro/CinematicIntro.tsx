@@ -56,23 +56,22 @@ export const CinematicIntro: React.FC = () => {
 
     const ctx = gsap.context(() => {
       // 1. Initial State:
-      // The lens starts in the center as an elegant circular aperture framing Preethika's eye.
-      // Pupil coordinates: x=45.5%, y=44.1%.
-      // Zoom factor: 2.6x with exact pupil centering:
-      const startScale = 2.6;
-      const startXPercent = 11.7; // (50% - 45.5%) * 2.6
-      const startYPercent = 15.3; // (50% - 44.1%) * 2.6
+      // The lens starts in the center as an elegant circular aperture framing Preethika's face and eyes.
+      // Perfectly centered horizontally (startXPercent = 0).
+      const startScale = 2.0;
+      const startXPercent = 0; // Perfectly centered horizontally!
+      const startYPercent = 4; // Natural vertical eye level
 
       gsap.set(macroImageRef.current, {
         scale: startScale,
         xPercent: startXPercent,
         yPercent: startYPercent,
-        transformOrigin: '50% 50%',
+        transformOrigin: '50% 40%',
       });
 
       gsap.set(lensFrameRef.current, {
-        width: 240,
-        height: 240,
+        width: 250,
+        height: 250,
         borderRadius: '9999px',
         boxShadow: '0 0 60px rgba(167, 199, 181, 0.25)',
       });
@@ -80,6 +79,10 @@ export const CinematicIntro: React.FC = () => {
       gsap.set(glowRingRef.current, {
         scale: 0.95,
         opacity: 0.6,
+      });
+
+      gsap.set('.intro-card-caption', {
+        opacity: 0,
       });
 
       gsap.set('.intro-text-reveal', {
@@ -150,6 +153,15 @@ export const CinematicIntro: React.FC = () => {
             ease: 'power2.out',
           },
           '<'
+        )
+        .to(
+          '.intro-card-caption',
+          {
+            opacity: 1,
+            duration: 0.6,
+            ease: 'power2.out',
+          },
+          '-=0.6'
         )
         // Step 4: Seamless Crossfade into the Hero section
         // Dissolves the dark intro screen while the light hero and single hero portrait smoothly take over!
@@ -282,7 +294,7 @@ export const CinematicIntro: React.FC = () => {
               </div>
 
               {/* Elegant interior caption that appears when card forms */}
-              <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#101010]/90 via-[#101010]/40 to-transparent text-white flex items-center justify-between text-xs font-mono pointer-events-none">
+              <div className="intro-card-caption absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#101010]/90 via-[#101010]/40 to-transparent text-white flex items-center justify-between text-xs font-mono pointer-events-none">
                 <span className="tracking-wide">PREETHIKA SURESH</span>
                 <span className="text-[#A7C7B5]">KKIT • ECE</span>
               </div>
