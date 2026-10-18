@@ -1,20 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { projectsData } from '@/data/portfolioData';
 import { Project } from '@/types/portfolio';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { ProjectDetailModal } from '@/components/projects/ProjectDetailModal';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
 export const ProjectsSection: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>('All');
@@ -32,29 +25,6 @@ export const ProjectsSection: React.FC = () => {
       ? projectsData
       : projectsData.filter((p) => p.category === activeFilter);
 
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      if (gridRef.current) {
-        gsap.from(gridRef.current.children, {
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: 'top 82%',
-            toggleActions: 'play none none none',
-          },
-          y: 50,
-          opacity: 0,
-          stagger: 0.1,
-          duration: 0.85,
-          ease: 'power3.out',
-        });
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [activeFilter]);
-
   const handleOpenProject = (project: Project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
@@ -67,7 +37,6 @@ export const ProjectsSection: React.FC = () => {
   return (
     <section
       id="projects"
-      ref={sectionRef}
       className="py-28 md:py-36 px-6 md:px-16 bg-[#151515] text-[#F8F8F5] relative overflow-hidden transition-colors duration-700"
     >
       {/* Background Ambient Glow */}
@@ -113,18 +82,25 @@ export const ProjectsSection: React.FC = () => {
           })}
         </div>
 
-        {/* Projects Grid */}
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {filteredProjects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onSelect={handleOpenProject}
-            />
-          ))}
+        {/* Projects Grid with robust entrance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, idx) => (
+              <motion.div
+                key={project.id}
+                layout
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.45, delay: idx * 0.06, ease: 'easeOut' }}
+              >
+                <ProjectCard
+                  project={project}
+                  onSelect={handleOpenProject}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
         {/* Transparent Disclaimer Notice */}

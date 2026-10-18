@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Award, BookOpen, Wrench, Calendar, CheckCircle2, Clock } from 'lucide-react';
@@ -20,7 +21,6 @@ const typeIcons: Record<string, React.ElementType> = {
 export const JourneySection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const lineRef = useRef<SVGLineElement>(null);
-  const itemsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -42,22 +42,6 @@ export const JourneySection: React.FC = () => {
             },
           }
         );
-      }
-
-      // Stagger timeline card items into view
-      if (itemsRef.current) {
-        gsap.from(itemsRef.current.children, {
-          scrollTrigger: {
-            trigger: itemsRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-          y: 40,
-          opacity: 0,
-          stagger: 0.15,
-          duration: 0.85,
-          ease: 'power3.out',
-        });
       }
     }, sectionRef);
 
@@ -109,13 +93,20 @@ export const JourneySection: React.FC = () => {
           </svg>
 
           {/* Timeline Items */}
-          <div ref={itemsRef} className="space-y-10">
+          <div className="space-y-10">
             {journeyMilestones.map((milestone, idx) => {
               const Icon = typeIcons[milestone.type] || BookOpen;
               const isCompleted = milestone.status === 'Completed';
 
               return (
-                <div key={idx} className="relative flex items-start gap-6 group">
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: 'easeOut' }}
+                  className="relative flex items-start gap-6 group"
+                >
                   {/* Timeline Node Marker */}
                   <div className="relative -ml-[23px] md:-ml-[39px] mt-1 shrink-0">
                     <div
@@ -171,7 +162,7 @@ export const JourneySection: React.FC = () => {
                       {milestone.details}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
