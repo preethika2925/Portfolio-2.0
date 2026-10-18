@@ -17,12 +17,13 @@ export const TextScramble: React.FC<TextScrambleProps> = ({
   text,
   className = '',
   as: Component = 'span',
-  scrambleOnHover = true,
+  scrambleOnHover = false,
   triggerInView = true,
 }) => {
   const [prevText, setPrevText] = useState(text);
   const [displayText, setDisplayText] = useState(text);
   const [isScrambling, setIsScrambling] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
@@ -31,14 +32,16 @@ export const TextScramble: React.FC<TextScrambleProps> = ({
   if (prevText !== text) {
     setPrevText(text);
     setDisplayText(text);
+    setHasAnimated(false);
   }
 
   const startScramble = useCallback(() => {
-    if (reducedMotion || isScrambling) return;
+    if (reducedMotion || isScrambling || hasAnimated) return;
 
+    setHasAnimated(true);
     setIsScrambling(true);
     let iteration = 0;
-    const totalIterations = text.length * 3;
+    const totalIterations = Math.min(text.length * 2.2, 35);
 
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
@@ -51,7 +54,7 @@ export const TextScramble: React.FC<TextScrambleProps> = ({
         .split('')
         .map((char, index) => {
           if (char === ' ') return ' ';
-          if (index < iteration / 3) {
+          if (index < iteration / 2.2) {
             return text[index];
           }
           return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
@@ -69,27 +72,27 @@ export const TextScramble: React.FC<TextScrambleProps> = ({
     };
 
     animationFrameRef.current = requestAnimationFrame(animate);
-  }, [text, isScrambling, reducedMotion]);
+  }, [text, isScrambling, hasAnimated, reducedMotion]);
 
-  // Trigger scramble once when element enters viewport
+  // Trigger scramble strictly once upon entering the viewport
   useEffect(() => {
-    if (!triggerInView || reducedMotion || !elementRef.current) return;
+    if (!triggerInView || reducedMotion || !elementRef.current || hasAnimated) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !hasAnimated) {
             startScramble();
             observer.disconnect();
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
     observer.observe(elementRef.current);
     return () => observer.disconnect();
-  }, [triggerInView, startScramble, reducedMotion]);
+  }, [triggerInView, startScramble, reducedMotion, hasAnimated]);
 
   useEffect(() => {
     return () => {
@@ -100,7 +103,7 @@ export const TextScramble: React.FC<TextScrambleProps> = ({
   }, []);
 
   const handleMouseEnter = () => {
-    if (scrambleOnHover) {
+    if (scrambleOnHover && !hasAnimated) {
       startScramble();
     }
   };
