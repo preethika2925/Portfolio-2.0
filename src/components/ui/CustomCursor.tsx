@@ -26,7 +26,7 @@ export const CustomCursor: React.FC = () => {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  const springConfig = { damping: 26, stiffness: 350, mass: 0.5 };
+  const springConfig = { damping: 28, stiffness: 400, mass: 0.3 };
   const cursorX = useSpring(mouseX, springConfig);
   const cursorY = useSpring(mouseY, springConfig);
 
@@ -36,13 +36,13 @@ export const CustomCursor: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      setIsVisible(true);
+      if (!isVisible) setIsVisible(true);
 
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
-      const interactive = target.closest('a, button, [role="button"], [data-cursor-interactive="true"]');
       const customCursorEl = target.closest('[data-cursor-text]') as HTMLElement | null;
+      const interactive = target.closest('a, button, [role="button"], [data-cursor-interactive="true"]');
 
       if (customCursorEl) {
         setCursorText(customCursorEl.getAttribute('data-cursor-text') || '');
@@ -68,7 +68,7 @@ export const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [mouseX, mouseY, isTouch, reducedMotion]);
+  }, [mouseX, mouseY, isVisible, isTouch, reducedMotion]);
 
   if (isTouch || reducedMotion || !isVisible) return null;
 
@@ -80,23 +80,25 @@ export const CustomCursor: React.FC = () => {
         y: cursorY,
       }}
     >
-      <motion.div
-        animate={{
-          scale: isHovered ? (cursorText ? 2.4 : 1.7) : 1,
-          backgroundColor: isHovered ? 'rgba(23, 23, 23, 0.9)' : 'rgba(23, 23, 23, 0.25)',
-          borderColor: isHovered ? 'rgba(167, 199, 181, 0.9)' : 'rgba(23, 23, 23, 0.5)',
-        }}
-        transition={{ duration: 0.18, ease: 'easeOut' }}
-        className="relative flex items-center justify-center rounded-full border border-[#171717]/40 w-8 h-8 backdrop-blur-[2px]"
-      >
-        {cursorText ? (
-          <span className="text-[7px] font-mono tracking-widest uppercase text-white font-semibold">
-            {cursorText}
-          </span>
-        ) : (
-          <div className="w-1.5 h-1.5 rounded-full bg-[#171717]" />
-        )}
-      </motion.div>
+      {isHovered ? (
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: cursorText ? 1.6 : 1.2, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.15, ease: 'easeOut' }}
+          className="relative flex items-center justify-center rounded-full bg-[#171717]/90 border border-[#A7C7B5] px-2.5 py-1 backdrop-blur-sm shadow-md"
+        >
+          {cursorText ? (
+            <span className="text-[8px] font-mono tracking-widest uppercase text-white font-semibold whitespace-nowrap">
+              {cursorText}
+            </span>
+          ) : (
+            <div className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
+          )}
+        </motion.div>
+      ) : (
+        <div className="w-2 h-2 rounded-full bg-[#171717]/60 pointer-events-none" />
+      )}
     </motion.div>
   );
 };

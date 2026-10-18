@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Cpu, Globe, Sprout, Terminal } from 'lucide-react';
 import { profileData } from '@/data/portfolioData';
+import { InteractiveEngineeringCanvas } from '@/components/ui/InteractiveEngineeringCanvas';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -169,26 +169,9 @@ export const AboutSection: React.FC = () => {
 
         {/* Middle Storytelling Composition */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Framed Editorial Portrait with Parallax */}
-          <div className="lg:col-span-5 order-2 lg:order-1">
-            <div
-              ref={portraitParallaxRef}
-              className="relative w-full max-w-md mx-auto aspect-[4/5] rounded-2xl overflow-hidden border border-[#E5E5E0] shadow-[0_16px_40px_rgba(0,0,0,0.06)] group"
-            >
-              <Image
-                src="/images/preethika-portrait.png"
-                alt="Preethika Suresh — Editorial Portrait"
-                fill
-                sizes="(max-width: 768px) 100vw, 450px"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                style={{ objectPosition: '50% 36%' }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#171717]/60 via-transparent to-transparent opacity-80" />
-              <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-mono flex items-center justify-between">
-                <span>PREETHIKA SURESH</span>
-                <span className="text-[#A7C7B5]">ENGINEERING IDENTITY</span>
-              </div>
-            </div>
+          {/* Interactive Engineering & Hardware Visual Matrix (Replaces duplicate portrait) */}
+          <div className="lg:col-span-5 order-2 lg:order-1" ref={portraitParallaxRef}>
+            <InteractiveEngineeringCanvas />
           </div>
 
           {/* Narrative Body Copy */}
