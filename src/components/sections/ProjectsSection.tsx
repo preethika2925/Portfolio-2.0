@@ -6,6 +6,7 @@ import { projectsData } from '@/data/portfolioData';
 import { Project } from '@/types/portfolio';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { ProjectDetailModal } from '@/components/projects/ProjectDetailModal';
+import { TextScramble } from '@/components/ui/TextScramble';
 
 export const ProjectsSection: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -48,7 +49,7 @@ export const ProjectsSection: React.FC = () => {
           <div className="space-y-2">
             <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#A7C7B5] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-              04 / Selected Works &amp; Concepts
+              <TextScramble text="04 / SELECTED WORKS & CONCEPTS" />
             </span>
             <h2 className="clamp-headline-lg font-serif-editorial text-white tracking-tight">
               Engineering Explorations

@@ -23,12 +23,19 @@ export const CustomCursor: React.FC = () => {
   const [cursorText, setCursorText] = useState('');
   const [isHovered, setIsHovered] = useState(false);
 
+  // Exact mouse position
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  const springConfig = { damping: 28, stiffness: 400, mass: 0.3 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
+  // Precision core spring (fast, responsive)
+  const coreConfig = { damping: 30, stiffness: 600, mass: 0.1 };
+  const coreX = useSpring(mouseX, coreConfig);
+  const coreY = useSpring(mouseY, coreConfig);
+
+  // Outer elastic ring spring (organic, trailing momentum)
+  const ringConfig = { damping: 24, stiffness: 260, mass: 0.25 };
+  const ringX = useSpring(mouseX, ringConfig);
+  const ringY = useSpring(mouseY, ringConfig);
 
   useEffect(() => {
     if (isTouch || reducedMotion) return;
@@ -73,32 +80,58 @@ export const CustomCursor: React.FC = () => {
   if (isTouch || reducedMotion || !isVisible) return null;
 
   return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] flex items-center justify-center -translate-x-1/2 -translate-y-1/2 will-change-transform"
-      style={{
-        x: cursorX,
-        y: cursorY,
-      }}
-    >
-      {isHovered ? (
+    <>
+      {/* Outer Spring Elastic Ring / Interactive Action Capsule */}
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-[9999] flex items-center justify-center -translate-x-1/2 -translate-y-1/2 will-change-transform"
+        style={{
+          x: ringX,
+          y: ringY,
+        }}
+      >
+        {isHovered ? (
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="relative flex items-center justify-center rounded-full bg-[#171717]/95 border border-[#A7C7B5] px-3 py-1.5 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+          >
+            {cursorText ? (
+              <span className="text-[9px] font-mono tracking-[0.2em] uppercase text-[#A7C7B5] font-semibold whitespace-nowrap">
+                {cursorText}
+              </span>
+            ) : (
+              <span className="w-2.5 h-2.5 rounded-full bg-[#A7C7B5] animate-ping" />
+            )}
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.6 }}
+            className="w-8 h-8 rounded-full border border-[#171717]/40 dark:border-white/40 pointer-events-none"
+          />
+        )}
+      </motion.div>
+
+      {/* Inner Precision Center Point */}
+      {!cursorText && (
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: cursorText ? 1.6 : 1.2, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="relative flex items-center justify-center rounded-full bg-[#171717]/90 border border-[#A7C7B5] px-2.5 py-1 backdrop-blur-sm shadow-md"
+          className="pointer-events-none fixed left-0 top-0 z-[10000] flex items-center justify-center -translate-x-1/2 -translate-y-1/2 will-change-transform"
+          style={{
+            x: coreX,
+            y: coreY,
+          }}
         >
-          {cursorText ? (
-            <span className="text-[8px] font-mono tracking-widest uppercase text-white font-semibold whitespace-nowrap">
-              {cursorText}
-            </span>
-          ) : (
-            <div className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-          )}
+          <div
+            className={`rounded-full transition-all duration-200 ${
+              isHovered
+                ? 'w-1 h-1 bg-[#A7C7B5]'
+                : 'w-2 h-2 bg-[#171717] dark:bg-white shadow-sm'
+            }`}
+          />
         </motion.div>
-      ) : (
-        <div className="w-2 h-2 rounded-full bg-[#171717]/60 pointer-events-none" />
       )}
-    </motion.div>
+    </>
   );
 };

@@ -6,6 +6,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Award, BookOpen, Wrench, Calendar, CheckCircle2, Clock } from 'lucide-react';
 import { journeyMilestones } from '@/data/portfolioData';
+import { TextScramble } from '@/components/ui/TextScramble';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -60,7 +62,7 @@ export const JourneySection: React.FC = () => {
           <div className="space-y-2">
             <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#777777] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-              05 / Chronology &amp; Learning
+              <TextScramble text="05 / CHRONOLOGY & LEARNING" />
             </span>
             <h2 className="clamp-headline-lg font-serif-editorial text-[#171717] tracking-tight">
               Academic &amp; Professional Path
@@ -120,48 +122,55 @@ export const JourneySection: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Milestone Card */}
-                  <div className="flex-grow p-6 md:p-8 rounded-2xl bg-white border border-[#E5E5E0] shadow-sm hover:border-[#171717]/30 hover:shadow-md transition-all duration-300 space-y-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E5E5E0]/60 pb-3">
-                      <div className="flex items-center gap-2 text-xs font-mono text-[#777777]">
-                        <Calendar className="w-3.5 h-3.5 text-[#A7C7B5]" />
-                        <span>{milestone.period}</span>
+                  {/* Milestone Card with 3D Spotlight */}
+                  <TiltSpotlightCard
+                    spotlightColor="rgba(167, 199, 181, 0.2)"
+                    maxTilt={5}
+                    cursorText="TIMELINE"
+                    className="flex-grow rounded-2xl"
+                  >
+                    <div className="p-6 md:p-8 rounded-2xl bg-white border border-[#E5E5E0] shadow-sm hover:border-[#171717]/30 hover:shadow-lg transition-all duration-300 space-y-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E5E5E0]/60 pb-3">
+                        <div className="flex items-center gap-2 text-xs font-mono text-[#777777]">
+                          <Calendar className="w-3.5 h-3.5 text-[#A7C7B5]" />
+                          <span>{milestone.period}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#F8F8F5] border border-[#E5E5E0] text-[#777777]">
+                            {milestone.type}
+                          </span>
+                          <span
+                            className={`text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 ${
+                              isCompleted
+                                ? 'bg-[#A7C7B5]/20 text-[#171717] font-semibold'
+                                : 'bg-[#D8B8A5]/25 text-[#171717] font-semibold'
+                            }`}
+                          >
+                            {isCompleted ? (
+                              <CheckCircle2 className="w-3 h-3 text-[#171717]" />
+                            ) : (
+                              <Clock className="w-3 h-3 text-[#171717]" />
+                            )}
+                            <span>{milestone.status}</span>
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#F8F8F5] border border-[#E5E5E0] text-[#777777]">
-                          {milestone.type}
-                        </span>
-                        <span
-                          className={`text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 ${
-                            isCompleted
-                              ? 'bg-[#A7C7B5]/20 text-[#171717] font-semibold'
-                              : 'bg-[#D8B8A5]/25 text-[#171717] font-semibold'
-                          }`}
-                        >
-                          {isCompleted ? (
-                            <CheckCircle2 className="w-3 h-3 text-[#171717]" />
-                          ) : (
-                            <Clock className="w-3 h-3 text-[#171717]" />
-                          )}
-                          <span>{milestone.status}</span>
-                        </span>
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-serif-editorial text-[#171717] mb-1">
+                          {milestone.title}
+                        </h3>
+                        <p className="text-xs font-mono text-[#777777]">
+                          {milestone.institution}
+                        </p>
                       </div>
-                    </div>
 
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-serif-editorial text-[#171717] mb-1">
-                        {milestone.title}
-                      </h3>
-                      <p className="text-xs font-mono text-[#777777]">
-                        {milestone.institution}
+                      <p className="text-xs md:text-sm text-[#171717]/80 font-sans leading-relaxed">
+                        {milestone.details}
                       </p>
                     </div>
-
-                    <p className="text-xs md:text-sm text-[#171717]/80 font-sans leading-relaxed">
-                      {milestone.details}
-                    </p>
-                  </div>
+                  </TiltSpotlightCard>
                 </motion.div>
               );
             })}

@@ -6,6 +6,8 @@ import { GithubIcon, LinkedinIcon } from '@/components/ui/SocialIcons';
 import confetti from 'canvas-confetti';
 import { profileData } from '@/data/portfolioData';
 import { contactFormSchema } from '@/lib/validation';
+import { TextScramble } from '@/components/ui/TextScramble';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 export const ContactSection: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -115,7 +117,7 @@ export const ContactSection: React.FC = () => {
         <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-6">
           <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#777777] flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-            06 / Communication &amp; Networks
+            <TextScramble text="06 / COMMUNICATION & NETWORKS" />
           </span>
           <span className="text-xs font-mono text-[#777777] uppercase tracking-wider">
             Let&apos;s Build Together
@@ -141,40 +143,47 @@ export const ContactSection: React.FC = () => {
                 Primary Coordinates
               </span>
 
-              {/* Email Card with 1-Click Copy */}
-              <div className="p-6 rounded-2xl bg-white border border-[#E5E5E0] shadow-sm space-y-3 group">
-                <div className="flex items-center justify-between text-xs font-mono text-[#777777]">
-                  <span className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-[#A7C7B5]" />
-                    Direct Email
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    className="flex items-center gap-1 text-[#171717] hover:text-[#A7C7B5] transition-colors focus:outline-none"
-                    aria-label="Copy email address"
-                  >
-                    {copiedEmail ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-600 font-medium">Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+              {/* Email Card with 3D Spotlight and 1-Click Copy */}
+              <TiltSpotlightCard
+                spotlightColor="rgba(167, 199, 181, 0.25)"
+                maxTilt={5}
+                cursorText="EMAIL"
+                className="rounded-2xl"
+              >
+                <div className="p-6 rounded-2xl bg-white border border-[#E5E5E0] shadow-sm space-y-3 group">
+                  <div className="flex items-center justify-between text-xs font-mono text-[#777777]">
+                    <span className="flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-[#A7C7B5]" />
+                      Direct Email
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      className="flex items-center gap-1 text-[#171717] hover:text-[#A7C7B5] transition-colors focus:outline-none cursor-pointer"
+                      aria-label="Copy email address"
+                    >
+                      {copiedEmail ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-600 font-medium">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
 
-                <a
-                  href={`mailto:${profileData.email}`}
-                  className="text-lg md:text-xl font-medium text-[#171717] hover:underline block break-all font-sans"
-                >
-                  {profileData.email}
-                </a>
-              </div>
+                  <a
+                    href={`mailto:${profileData.email}`}
+                    className="text-lg md:text-xl font-medium text-[#171717] hover:underline block break-all font-sans"
+                  >
+                    {profileData.email}
+                  </a>
+                </div>
+              </TiltSpotlightCard>
 
               {/* Verified Professional Links */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

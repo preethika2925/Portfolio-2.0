@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Code2, Globe2, Database, Cpu, CheckCircle2, Info } from 'lucide-react';
 import { skillsData } from '@/data/portfolioData';
+import { TextScramble } from '@/components/ui/TextScramble';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 const categoryIcons: Record<string, React.ElementType> = {
   Programming: Code2,
@@ -38,7 +40,7 @@ export const SkillsSection: React.FC = () => {
           <div className="space-y-2">
             <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#777777] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-              03 / Technical Matrix
+              <TextScramble text="03 / TECHNICAL MATRIX" />
             </span>
             <h2 className="clamp-headline-lg font-serif-editorial text-[#171717] tracking-tight">
               Tools, Protocols &amp; Foundations
@@ -144,43 +146,50 @@ export const SkillsSection: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          {/* Right Sticky Inspector Card */}
+          {/* Right Sticky Inspector Card with 3D Spotlight */}
           <div className="lg:col-span-4 lg:sticky lg:top-28">
-            <div className="p-6 md:p-8 rounded-2xl bg-white border border-[#E5E5E0] shadow-md space-y-6">
-              <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-4">
-                <span className="text-xs font-mono uppercase tracking-widest text-[#777777] flex items-center gap-2">
-                  <Info className="w-3.5 h-3.5 text-[#A7C7B5]" />
-                  Technology Inspector
-                </span>
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#A7C7B5]/20 text-[#171717] font-semibold">
-                  {activeSkill.category}
-                </span>
-              </div>
+            <TiltSpotlightCard
+              spotlightColor="rgba(167, 199, 181, 0.25)"
+              maxTilt={6}
+              cursorText="METRICS"
+              className="rounded-2xl shadow-md"
+            >
+              <div className="p-6 md:p-8 rounded-2xl bg-white border border-[#E5E5E0] space-y-6">
+                <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-4">
+                  <span className="text-xs font-mono uppercase tracking-widest text-[#777777] flex items-center gap-2">
+                    <Info className="w-3.5 h-3.5 text-[#A7C7B5]" />
+                    <TextScramble text="TECHNOLOGY INSPECTOR" />
+                  </span>
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#A7C7B5]/20 text-[#171717] font-semibold">
+                    {activeSkill.category}
+                  </span>
+                </div>
 
-              <div className="space-y-3">
-                <h4 className="text-2xl font-serif-editorial text-[#171717]">
-                  {activeSkill.name}
-                </h4>
-                <p className="text-sm font-sans text-[#171717]/80 leading-relaxed">
-                  {activeSkill.description}
-                </p>
-              </div>
+                <div className="space-y-3">
+                  <h4 className="text-2xl font-serif-editorial text-[#171717]">
+                    {activeSkill.name}
+                  </h4>
+                  <p className="text-sm font-sans text-[#171717]/80 leading-relaxed">
+                    {activeSkill.description}
+                  </p>
+                </div>
 
-              <div className="p-4 rounded-xl bg-[#F8F8F5] border border-[#E5E5E0] space-y-2">
-                <span className="text-xs font-mono text-[#777777] uppercase block">
-                  Application Scope
-                </span>
-                <div className="flex items-center gap-2 text-xs font-medium text-[#171717]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#A7C7B5]" />
-                  <span>Applied in academic engineering and project explorations</span>
+                <div className="p-4 rounded-xl bg-[#F8F8F5] border border-[#E5E5E0] space-y-2">
+                  <span className="text-xs font-mono text-[#777777] uppercase block">
+                    Application Scope
+                  </span>
+                  <div className="flex items-center gap-2 text-xs font-medium text-[#171717]">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#A7C7B5]" />
+                    <span>Applied in academic engineering and project explorations</span>
+                  </div>
+                </div>
+
+                <div className="text-[11px] font-mono text-[#777777] leading-relaxed pt-2">
+                  * Skills are represented transparently based on actual academic and project engagement
+                  without arbitrary percentage metrics.
                 </div>
               </div>
-
-              <div className="text-[11px] font-mono text-[#777777] leading-relaxed pt-2">
-                * Skills are represented transparently based on actual academic and project engagement
-                without arbitrary percentage metrics.
-              </div>
-            </div>
+            </TiltSpotlightCard>
           </div>
         </div>
       </div>

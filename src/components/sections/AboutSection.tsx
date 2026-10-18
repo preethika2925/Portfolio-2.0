@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Cpu, Globe, Sprout, Terminal } from 'lucide-react';
 import { profileData } from '@/data/portfolioData';
 import { InteractiveEngineeringCanvas } from '@/components/ui/InteractiveEngineeringCanvas';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
+import { TextScramble } from '@/components/ui/TextScramble';
 
 const engineeringPillars = [
   {
@@ -136,11 +138,12 @@ export const AboutSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Engineering Pillars Grid: Guaranteed 100% Reliable Rendering */}
+        {/* Engineering Pillars Grid: Guaranteed 100% Reliable Rendering with 3D Spotlight */}
         <div className="space-y-6 pt-8">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#777777]">
-              Disciplines of Exploration
+            <span className="text-xs font-mono uppercase tracking-widest text-[#777777] flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#A7C7B5]" />
+              <TextScramble text="DISCIPLINES OF EXPLORATION" />
             </span>
             <span className="text-xs font-mono text-[#777777]">04 Foundational Pillars</span>
           </div>
@@ -155,19 +158,28 @@ export const AboutSection: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.08, ease: 'easeOut' }}
-                  className="group p-6 rounded-2xl bg-white border border-[#E5E5E0] hover:border-[#171717]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between space-y-4"
+                  className="h-full"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#F8F8F5] border border-[#E5E5E0] flex items-center justify-center text-[#171717] group-hover:bg-[#171717] group-hover:text-[#F8F8F5] transition-colors duration-300">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-semibold text-[#171717] mb-2 font-sans tracking-tight">
-                      {pillar.title}
-                    </h3>
-                    <p className="text-xs leading-relaxed text-[#777777]">
-                      {pillar.description}
-                    </p>
-                  </div>
+                  <TiltSpotlightCard
+                    spotlightColor="rgba(167, 199, 181, 0.22)"
+                    maxTilt={7}
+                    cursorText="INSPECT"
+                    className="h-full rounded-2xl"
+                  >
+                    <div className="group p-6 rounded-2xl bg-white border border-[#E5E5E0] hover:border-[#171717]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full space-y-4">
+                      <div className="w-10 h-10 rounded-xl bg-[#F8F8F5] border border-[#E5E5E0] flex items-center justify-center text-[#171717] group-hover:bg-[#171717] group-hover:text-[#F8F8F5] transition-colors duration-300 shadow-sm">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-semibold text-[#171717] mb-2 font-sans tracking-tight">
+                          {pillar.title}
+                        </h3>
+                        <p className="text-xs leading-relaxed text-[#777777]">
+                          {pillar.description}
+                        </p>
+                      </div>
+                    </div>
+                  </TiltSpotlightCard>
                 </motion.div>
               );
             })}

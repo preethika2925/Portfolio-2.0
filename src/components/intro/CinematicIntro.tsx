@@ -8,6 +8,8 @@ import { ArrowDown, Sparkles } from 'lucide-react';
 import { eyeConfig, profileData } from '@/data/portfolioData';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { MagneticButton } from '@/components/ui/MagneticButton';
+import { TextScramble } from '@/components/ui/TextScramble';
+import { TiltSpotlightCard } from '@/components/ui/TiltSpotlightCard';
 
 // Register GSAP plugins safely on client
 if (typeof window !== 'undefined') {
@@ -335,7 +337,7 @@ export const CinematicIntro: React.FC = () => {
           {/* Engineering Degree Pill */}
           <div className="hero-stagger inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#E5E5E0] bg-white/90 backdrop-blur-sm self-start text-xs font-mono text-[#171717] tracking-wider uppercase shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#A7C7B5]" />
-            <span>Electronics &amp; Communication Engineering &apos;29</span>
+            <TextScramble text="ELECTRONICS & COMMUNICATION ENGINEERING '29" />
           </div>
 
           {/* Big Signature Headline */}
@@ -400,25 +402,31 @@ export const CinematicIntro: React.FC = () => {
           <div className="absolute -inset-3 rounded-3xl border border-[#E5E5E0]/60 pointer-events-none -rotate-1 -z-10" />
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-[#A7C7B5]/15 via-transparent to-[#D8B8A5]/15 pointer-events-none -z-10" />
 
-          {/* Hero Portrait Card */}
-          <div
-            ref={heroPortraitRef}
-            className="hero-stagger relative w-full max-w-[380px] aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-[#E5E5E0] bg-[#ebebe6] group transition-transform duration-500 hover:shadow-2xl"
-          >
-            <Image
-              src={eyeConfig.portraitPath}
-              alt="Preethika Suresh — Portrait"
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 420px"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              style={{ objectPosition: '50% 36%' }}
-            />
-            {/* Elegant overlay caption */}
-            <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#171717]/85 via-[#171717]/40 to-transparent text-white flex items-center justify-between text-xs font-mono">
-              <span className="tracking-wide">PREETHIKA SURESH</span>
-              <span className="text-[#A7C7B5]">KIT • ECE</span>
-            </div>
+          {/* Hero Portrait Card with 3D Spotlight */}
+          <div ref={heroPortraitRef} className="hero-stagger w-full max-w-[380px]">
+            <TiltSpotlightCard
+              spotlightColor="rgba(167, 199, 181, 0.24)"
+              maxTilt={6}
+              cursorText="PREETHIKA"
+              className="rounded-3xl"
+            >
+              <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-[#E5E5E0] bg-[#ebebe6] group transition-transform duration-500 hover:shadow-2xl">
+                <Image
+                  src={eyeConfig.portraitPath}
+                  alt="Preethika Suresh — Portrait"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 420px"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  style={{ objectPosition: '50% 36%' }}
+                />
+                {/* Elegant overlay caption */}
+                <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-[#171717]/85 via-[#171717]/40 to-transparent text-white flex items-center justify-between text-xs font-mono">
+                  <span className="tracking-wide">PREETHIKA SURESH</span>
+                  <span className="text-[#A7C7B5]">KIT • ECE</span>
+                </div>
+              </div>
+            </TiltSpotlightCard>
           </div>
         </div>
       </div>
